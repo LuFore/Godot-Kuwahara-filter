@@ -1,7 +1,7 @@
 # Godot-Kuwahara-filter
 A Kuwahara Filter using the gd shading language.
 
-##Use
+## Use
 The .gdshader file should just work when placed into a Godot 4.0 project.
 
 I can't handle C style syntax without the preprocessor so have used it in the .shader source file. 
