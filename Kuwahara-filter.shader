@@ -9,15 +9,6 @@ uniform u window_radius = u(4);//should never be 0
 #define GEN_STARTPOS(qmask,xy) ((float(-qmask.xy)*offset.xy) + SCREEN_UV.xy)
 #define GEN_ENDPOS(qmask,xy) ((float(1^qmask.xy)*offset.xy) + SCREEN_UV.xy)
 
-RGB debugger(u a)
-{
-	if(a == u(0)){ return(vec3(0.0,0.0,0.0));}
-	if(a == u(1)){ return(vec3(1.0,0.0,0.0));}
-	if(a == u(2)){ return(vec3(0.0,1.0,0.0));}
-	if(a == u(3)){ return(vec3(0.0,0.0,1.0));}
-	return vec3(1.0,1.0,1.0);
-}
-
 float get_max_val(vec3 inp)
 {
 	float r = inp[0];
@@ -48,8 +39,8 @@ void fragment() {
 	ivec2 q_mask;
 	vec2 start;
 	vec2 end;
-	float qat; //qauter average temporary
-	float qot; //qauter SD temporary
+	float qat; //quarter average temporary
+	float qot; //quarter SD temporary
 
 	for(u qi = u(0); qi <= u(3); qi++)
 	{
@@ -63,7 +54,6 @@ void fragment() {
 		{
 			for(float iy = start.y; iy <= end.y;  iy = iy + SCREEN_PIXEL_SIZE.y)
 			{
-				//this gets re-calculated a LOT - do it better?
 				//finding the HSV V
 				val = get_max_val(GET_PIXEL(vec2(ix,iy)).rgb);
 				qat = qat + val;
@@ -73,8 +63,6 @@ void fragment() {
 		//calculate vairance, should be SD 
 		//but doesn't matter as only used to compare mangitudes 
 		qot =  sqrt((qot - pow(qat,2)/no_of_samples)/no_of_samples);
-		//pow(qat/no_of_samples,2) + 
-		//(-(2.0 * qat * qat/no_of_samples) + qot)/no_of_samples;
 		
 		if(qot < qo || firstrun == true)
 		{
